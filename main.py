@@ -1,3 +1,5 @@
+import json
+
 game_list = [
    {'id': 1, 'name': 'Final Fantasy', 'genre': 'Fantasy', 'console': 'Playstation 3', 'year': 2010, 'rate': 4.2, 'status': 'Playing'},
    {'id': 2, 'name': 'GTA 4', 'genre': 'Action', 'console': 'Playstation 4', 'year': 2016, 'rate': 4.8, 'status': 'Completed'},
@@ -7,10 +9,24 @@ game_list = [
 
 empty_game_list = []
 
-def show_games(g_list):
+def check_games(g_list):
    # Check if the list of games is empty
    if not g_list:
-      print('\nYour game list is empty. To add a game to your list click HERE!')
+      empty_list_message = '\nYour game list is empty. To add a game to your list click HERE!'
+      return empty_list_message
+
+   else:
+      return g_list
+
+def print_games(g_list):
+   # Call the check_games function
+   c_games_result = check_games(g_list)
+
+   # Check if the return is a string or a list
+   if isinstance(c_games_result, str):
+
+      # If there's no games in the list
+      print(c_games_result)
       return
 
    # Get the number of games in the list
@@ -36,6 +52,28 @@ def show_games(g_list):
       format_year = str(game['year']).rjust(15)         
       format_status = game['status'].rjust(30)         
       format_rate = str(game['rate']).rjust(15)
-      print(format_game + format_genre + format_console + format_year + format_status + format_rate)        
+      print(format_game + format_genre + format_console + format_year + format_status + format_rate)
 
-show_games([game_list])
+def get_games(g_list):
+   # Get the number of games in the list
+   total_of_games = len(g_list)
+
+   # Call the check_games function
+   c_games_result = check_games(g_list)
+
+   # Check if the return is a string or a list
+   if isinstance(c_games_result, str):
+
+      # If there's no games in the list
+      return total_of_games, c_games_result
+
+   # Convert the dictionary into JSON
+   games_json = json.dumps(g_list)    
+
+   return total_of_games, games_json
+
+print(get_games(game_list))
+print_games(game_list)
+
+print(get_games(empty_game_list))
+print_games(empty_game_list)
