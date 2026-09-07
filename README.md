@@ -102,6 +102,7 @@ O projeto é considerado completo quando:
 - O sistema pode ser usado do início ao fim (cadastrar, ver, editar, remover, sair) sem erros não tratados.
 - Ambos os integrantes conseguem explicar o funcionamento completo do sistema, incluindo a parte que não desenvolveram diretamente.
 
+
 O projeto é considerado completo quando:
 
 - Todos os requisitos funcionais listados acima estão implementados e funcionando.
