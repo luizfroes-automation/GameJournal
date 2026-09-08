@@ -1,32 +1,38 @@
 import json
 
+genre_list = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports', 'Racing', 'Puzzle', 'Platformer', 'Horror', 'Fighting', 'Shooter', 'Party', 'Sandbox']
+
+status_list = ['Playing', 'Completed', 'Want to Play', 'Abandoned']
+
 game_list = [
-   {'id': 1, 'name': 'Final Fantasy', 'genre': 'Fantasy', 'console': 'Playstation 3', 'year': 2010, 'rate': 4.2, 'status': 'Playing'},
-   {'id': 2, 'name': 'GTA 4', 'genre': 'Action', 'console': 'Playstation 4', 'year': 2016, 'rate': 4.8, 'status': 'Completed'},
-   {'id': 3, 'name': 'Halo 5', 'genre': 'RPG', 'console': 'Playstation 5', 'year': 2020, 'rate': 3.8, 'status': 'Want to Play'},
-   {'id': 4, 'name': 'Super Mario Kart', 'genre': 'Race', 'console': 'Super Nintendo', 'year': 1996, 'rate': 4.1, 'status': 'Abandoned'}
-   ]
+    {'id': 1, 'name': 'Final Fantasy', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2010, 'rate': 4.2, 'status': 'Playing'},
+    {'id': 2, 'name': 'Final Fantasy VII Remake', 'genre': 'RPG', 'console': 'Playstation 4', 'year': 2020, 'rate': 4.9, 'status': 'Completed'},
+    {'id': 3, 'name': 'GTA 4', 'genre': 'Action', 'console': 'Playstation 4', 'year': 2016, 'rate': 4.8, 'status': 'Completed'},
+    {'id': 4, 'name': 'GTA San Andreas', 'genre': 'Action', 'console': 'Playstation 2', 'year': 2004, 'rate': 4.7, 'status': 'Abandoned'},
+    {'id': 5, 'name': 'Halo 5', 'genre': 'Shooter', 'console': 'Playstation 5', 'year': 2020, 'rate': 3.8, 'status': 'Want to Play'},
+    {'id': 6, 'name': 'Super Mario Kart', 'genre': 'Racing', 'console': 'Super Nintendo', 'year': 1996, 'rate': 4.1, 'status': 'Abandoned'},
+    {'id': 7, 'name': 'The Legend of Zelda', 'genre': 'Adventure', 'console': 'Super Nintendo', 'year': 1998, 'rate': 5.0, 'status': 'Completed'},
+    {'id': 8, 'name': 'Dark Souls', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2011, 'rate': 4.6, 'status': 'Playing'},
+    {'id': 9, 'name': 'Street Fighter II', 'genre': 'Fighting', 'console': 'Super Nintendo', 'year': 1991, 'rate': 4.3, 'status': 'Want to Play'},
+    {'id': 10, 'name': 'Minecraft', 'genre': 'Sandbox', 'console': 'Playstation 4', 'year': 2011, 'rate': 4.5, 'status': 'Playing'}
+]
 
 empty_game_list = []
 
-def check_games(g_list):
-   # Check if the list of games is empty
-   if not g_list:
-      empty_list_message = '\nYour game list is empty. To add a game to your list click HERE!'
-      return empty_list_message
-
-   else:
-      return g_list
+def is_empty(g_list):
+   # An empty list is considered False in Python, so 'not' turns it into True.
+   return not g_list
 
 def print_games(g_list):
    # Call the check_games function
-   c_games_result = check_games(g_list)
+   c_games_result = is_empty(g_list)
 
-   # Check if the return is a string or a list
-   if isinstance(c_games_result, str):
+   # Check if the list of games is empty
+   if c_games_result:
 
       # If there's no games in the list
-      print(c_games_result)
+      empty_list_message = '\nYour game list is empty. To add a game to your list click HERE!'
+      print(empty_list_message)
       return
 
    # Get the number of games in the list
@@ -58,22 +64,45 @@ def get_games(g_list):
    # Get the number of games in the list
    total_of_games = len(g_list)
 
-   # Call the check_games function
-   c_games_result = check_games(g_list)
-
-   # Check if the return is a string or a list
-   if isinstance(c_games_result, str):
-
-      # If there's no games in the list
-      return total_of_games, c_games_result
-
    # Convert the dictionary into JSON
    games_json = json.dumps(g_list)    
 
    return total_of_games, games_json
 
-print(get_games(game_list))
-print_games(game_list)
+# print(get_games(game_list))
+# print_games(game_list)
 
-print(get_games(empty_game_list))
-print_games(empty_game_list)
+# print(get_games(empty_game_list))
+# print_games(empty_game_list)
+
+# -------------------------- SEARCH SECTION ---------------------------------- #
+
+# selected_menu = 'name'
+
+game_name = input('Please type the name of the game you would like to search:\n')
+
+# Function to normalize the data
+def normalize(field):
+   normalized_field = field.lower().strip()
+   return normalized_field
+
+# Function to search a game by name
+def search_by_name(user_input, g_list):
+   # Normalize the user's input
+   normalized_input = normalize(user_input)
+
+   search_game_result = []
+
+   # Iterate through the List of games to search based on customers input
+   for game in g_list:
+      normalized_game_name = normalize(game['name'])
+      has_search_game = normalized_input in normalized_game_name
+
+      # Save the result in the search game list
+      if has_search_game:
+         search_game_result.append(game)
+   
+   # Return the list of games found 
+   return search_game_result
+
+print(search_by_name(game_name, game_list))
