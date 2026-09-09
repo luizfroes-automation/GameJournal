@@ -133,7 +133,7 @@ def filter_by_status(status, g_list):
    # Return the list of games found 
    return search_status_result
 
-console_name = input('Please type the name of the console you would like to search:\n')
+# console_name = input('Please type the name of the console you would like to search:\n')
 
 # Function to search a game by console name
 def filter_by_console(user_input, g_list):
@@ -153,3 +153,37 @@ def filter_by_console(user_input, g_list):
    
    # Return the list of games found
    return search_console_result
+
+# Prompt the customer to select a stert year
+def get_year_input():
+   valid_year = False
+  
+   # While the years are not valid send an error message and request the years again
+   while not valid_year:
+      start_year = int(input('Please type the start year:\n'))
+      end_year = int(input('Please type the end year:\n'))
+
+      # Validate user's input to check if start year is smaller then end year
+      if start_year <= end_year:
+         valid_year = True
+         
+      else:
+         print('Start year cannot be after the end year.\n')
+
+   return start_year, end_year
+
+# Save start year and the end year in 2 variables
+# start_year, end_year = get_year_input()
+
+# Function to search a game between a start year and a end year
+def filter_by_year(start_year, end_year, g_list):
+   search_year_result = []
+
+    # Iterate through the List of games to search based on customers input
+   for game in g_list:
+      # If the game year is between the start year and end year add it the search game list
+      if start_year <= game['year'] and game['year'] <= end_year:
+         search_year_result.append(game)
+
+   return search_year_result
+
