@@ -79,7 +79,7 @@ def get_games(g_list):
 
 # selected_menu = 'name'
 
-game_name = input('Please type the name of the game you would like to search:\n')
+# game_name = input('Please type the name of the game you would like to search:\n')
 
 # Function to normalize the data
 def normalize(field):
@@ -105,4 +105,32 @@ def search_by_name(user_input, g_list):
    # Return the list of games found 
    return search_game_result
 
-print(search_by_name(game_name, game_list))
+# print(search_by_name(game_name, game_list))
+
+# Prompt the customer to select one status option (mirroring the frontend)
+print(f'You have the following statuses:')
+for index, status in enumerate(status_list, start=1):
+   print(f'{index} - {status}')
+
+# Save the input in a variable as an interger
+selected_option = int(input('To select a status, please type the number of one the options above: '))
+
+# Find the selected status
+selected_status = status_list[selected_option - 1]
+
+# Function to search a game by status
+def search_by_status(status, g_list):
+   search_status_result = []
+
+   # Iterate through the List of games to search based on customers input
+   for game in g_list:
+      has_search_status = status == game['status']
+   
+      # Save the result in the search status list
+      if has_search_status:
+          search_status_result.append(game)
+      
+   # Return the list of games found 
+   return search_status_result
+
+print(search_by_status(selected_status, game_list, status_list))
