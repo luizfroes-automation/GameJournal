@@ -188,15 +188,15 @@ def filter_by_year(start_year, end_year, g_list):
    return search_year_result
 
 # Prompt the customer to select one genre option (mirroring the frontend)
-print(f'You have the following Genres:')
-for index, genres in enumerate(genre_list, start=1):
-   print(f'{index} - {genres}')
+# print(f'You have the following Genres:')
+# for index, genres in enumerate(genre_list, start=1):
+#    print(f'{index} - {genres}')
 
-# Save the input in a variable as an interger
-selected_option = int(input('To select a Genre, please type the number of one the options above: '))
+# # Save the input in a variable as an interger
+# selected_option = int(input('To select a Genre, please type the number of one the options above: '))
 
-# Find the selected genre
-selected_genre = genre_list[selected_option - 1]
+# # Find the selected genre
+# selected_genre = genre_list[selected_option - 1]
 
 # Function to search a game by genre
 def filter_by_genre(genre, g_list):
@@ -212,5 +212,3 @@ def filter_by_genre(genre, g_list):
       
    # Return the list of games found 
    return search_genre_result
-
-print(filter_by_genre(selected_genre, game_list))
