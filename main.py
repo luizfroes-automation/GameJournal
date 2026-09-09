@@ -87,7 +87,7 @@ def normalize(field):
    return normalized_field
 
 # Function to search a game by name
-def search_by_name(user_input, g_list):
+def filter_by_name(user_input, g_list):
    # Normalize the user's input
    normalized_input = normalize(user_input)
 
@@ -105,21 +105,21 @@ def search_by_name(user_input, g_list):
    # Return the list of games found 
    return search_game_result
 
-# print(search_by_name(game_name, game_list))
+# print(filter_by_name(game_name, game_list))
 
 # Prompt the customer to select one status option (mirroring the frontend)
-print(f'You have the following statuses:')
-for index, status in enumerate(status_list, start=1):
-   print(f'{index} - {status}')
+# print(f'You have the following statuses:')
+# for index, status in enumerate(status_list, start=1):
+#    print(f'{index} - {status}')
 
 # Save the input in a variable as an interger
-selected_option = int(input('To select a status, please type the number of one the options above: '))
+# selected_option = int(input('To select a status, please type the number of one the options above: '))
 
 # Find the selected status
-selected_status = status_list[selected_option - 1]
+ # selected_status = status_list[selected_option - 1]
 
 # Function to search a game by status
-def search_by_status(status, g_list):
+def filter_by_status(status, g_list):
    search_status_result = []
 
    # Iterate through the List of games to search based on customers input
@@ -133,4 +133,23 @@ def search_by_status(status, g_list):
    # Return the list of games found 
    return search_status_result
 
-print(search_by_status(selected_status, game_list, status_list))
+console_name = input('Please type the name of the console you would like to search:\n')
+
+# Function to search a game by console name
+def filter_by_console(user_input, g_list):
+   # Normalize the user's input
+   normalized_input = normalize(user_input)
+
+   search_console_result = []
+
+   # Iterate through the List of games to search based on customers input
+   for game in g_list:
+      normalized_console_name = normalize(game['console'])
+      has_search_console = normalized_input == normalized_console_name
+
+      # Save the result in the search console list
+      if has_search_console:
+         search_console_result.append(game)
+   
+   # Return the list of games found
+   return search_console_result
