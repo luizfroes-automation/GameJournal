@@ -19,6 +19,8 @@ game_list = [
 
 empty_game_list = []
 
+search_criteria_list = ['Name', 'Status', 'Genre', 'Console', 'Year']
+
 def is_empty(g_list):
    # An empty list is considered False in Python, so 'not' turns it into True.
    return not g_list
@@ -77,7 +79,31 @@ def get_games(g_list):
 
 # -------------------------- SEARCH SECTION ---------------------------------- #
 
-# selected_menu = 'name'
+# Prompt the customer to select one option (mirroring the frontend)
+def get_user_input(option_list):
+   valid_option = False
+  
+   # While the option are not valid send an error message and request the user to select again
+   while not valid_option:
+      print(f'You have the following otions:')
+      for index, option in enumerate(option_list, start=1):
+         print(f'{index} - {option}')
+
+      # Save the input in a variable as an interger
+      selected_option_input = int(input('To select an option, please type the number of one the options above:\n'))
+
+      # Validate user's input to check if selected option exists
+      if selected_option_input >= 1 and selected_option_input <= len(option_list):
+         # Find the selected otion in the respective list
+         selected_option = option_list[selected_option_input - 1]
+         valid_option = True
+         
+      else:
+         print('Please select a valid option.\n')
+
+   return selected_option
+
+# ----------------------------------------FILTER BY GAME ------------------------------------------------------ #
 
 # game_name = input('Please type the name of the game you would like to search:\n')
 
@@ -107,16 +133,7 @@ def filter_by_name(user_input, g_list):
 
 # print(filter_by_name(game_name, game_list))
 
-# Prompt the customer to select one status option (mirroring the frontend)
-# print(f'You have the following statuses:')
-# for index, status in enumerate(status_list, start=1):
-#    print(f'{index} - {status}')
-
-# Save the input in a variable as an interger
-# selected_option = int(input('To select a status, please type the number of one the options above: '))
-
-# Find the selected status
- # selected_status = status_list[selected_option - 1]
+# ----------------------------------------FILTER BY STATUS ------------------------------------------------------ #
 
 # Function to search a game by status
 def filter_by_status(status, g_list):
@@ -132,6 +149,8 @@ def filter_by_status(status, g_list):
       
    # Return the list of games found 
    return search_status_result
+
+# ----------------------------------------FILTER BY CONSOLE ------------------------------------------------------ #
 
 # console_name = input('Please type the name of the console you would like to search:\n')
 
@@ -154,6 +173,8 @@ def filter_by_console(user_input, g_list):
    # Return the list of games found
    return search_console_result
 
+# ----------------------------------------FILTER BY YEAR ------------------------------------------------------ #
+
 # Prompt the customer to select a stert year
 def get_year_input():
    valid_year = False
@@ -172,11 +193,10 @@ def get_year_input():
 
    return start_year, end_year
 
-# Save start year and the end year in 2 variables
-# start_year, end_year = get_year_input()
-
 # Function to search a game between a start year and a end year
-def filter_by_year(start_year, end_year, g_list):
+def filter_by_year(year_input, g_list):
+   start_year, end_year = year_input
+
    search_year_result = []
 
     # Iterate through the List of games to search based on customers input
@@ -187,16 +207,7 @@ def filter_by_year(start_year, end_year, g_list):
 
    return search_year_result
 
-# Prompt the customer to select one genre option (mirroring the frontend)
-# print(f'You have the following Genres:')
-# for index, genres in enumerate(genre_list, start=1):
-#    print(f'{index} - {genres}')
-
-# # Save the input in a variable as an interger
-# selected_option = int(input('To select a Genre, please type the number of one the options above: '))
-
-# # Find the selected genre
-# selected_genre = genre_list[selected_option - 1]
+# ----------------------------------------FILTER BY GENRE ------------------------------------------------------ #
 
 # Function to search a game by genre
 def filter_by_genre(genre, g_list):
@@ -212,3 +223,33 @@ def filter_by_genre(genre, g_list):
       
    # Return the list of games found 
    return search_genre_result
+
+# -------------------------- STATS SECTION ---------------------------------- #
+
+filter_functions = {'Name': filter_by_name, 'Status': filter_by_status, 'Genre': filter_by_genre, 'Console': filter_by_console, 'Year': filter_by_year}
+
+selected_filter = (get_user_input(search_criteria_list))
+
+filter_function = filter_functions[selected_filter]
+
+if selected_filter == 'Name':
+   game_name = input('Please type the name of the game you would like to search:\n')
+   search_result = filter_function(game_name, game_list)
+
+elif selected_filter == 'Console':
+   console_name = input('Please type the name of the console you would like to search:\n')
+   search_result = filter_function(console_name, game_list)
+
+elif selected_filter == 'Year':
+   selected_year = get_year_input()
+   search_result = filter_function(selected_year, game_list)
+
+elif selected_filter == 'Genre':
+   selected_genre = get_user_input(genre_list)
+   search_result = filter_function(selected_genre, game_list)
+
+elif selected_filter == 'Status':
+   selected_status = get_user_input(status_list)
+   search_result = filter_function(selected_status, game_list)
+
+# print(search_result)
