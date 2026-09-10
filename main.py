@@ -1,255 +1,54 @@
-import json
+from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions
 
-genre_list = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports', 'Racing', 'Puzzle', 'Platformer', 'Horror', 'Fighting', 'Shooter', 'Party', 'Sandbox']
+from functions import get_user_input, get_year_input, get_games, print_games
 
-status_list = ['Playing', 'Completed', 'Want to Play', 'Abandoned']
+# -------------------------- MENU SECTION ---------------------------------- #
+def menu():
+    print('\n- - - Welcome to your Game Journal - - - \n')
+    print('Option 1: List of games')
+    print('Option 2: Search a game')
+    print('Option 0: Exit')
 
-game_list = [
-    {'id': 1, 'name': 'Final Fantasy', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2010, 'rate': 4.2, 'status': 'Playing'},
-    {'id': 2, 'name': 'Final Fantasy VII Remake', 'genre': 'RPG', 'console': 'Playstation 4', 'year': 2020, 'rate': 4.9, 'status': 'Completed'},
-    {'id': 3, 'name': 'GTA 4', 'genre': 'Action', 'console': 'Playstation 4', 'year': 2016, 'rate': 4.8, 'status': 'Completed'},
-    {'id': 4, 'name': 'GTA San Andreas', 'genre': 'Action', 'console': 'Playstation 2', 'year': 2004, 'rate': 4.7, 'status': 'Abandoned'},
-    {'id': 5, 'name': 'Halo 5', 'genre': 'Shooter', 'console': 'Playstation 5', 'year': 2020, 'rate': 3.8, 'status': 'Want to Play'},
-    {'id': 6, 'name': 'Super Mario Kart', 'genre': 'Racing', 'console': 'Super Nintendo', 'year': 1996, 'rate': 4.1, 'status': 'Abandoned'},
-    {'id': 7, 'name': 'The Legend of Zelda', 'genre': 'Adventure', 'console': 'Super Nintendo', 'year': 1998, 'rate': 5.0, 'status': 'Completed'},
-    {'id': 8, 'name': 'Dark Souls', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2011, 'rate': 4.6, 'status': 'Playing'},
-    {'id': 9, 'name': 'Street Fighter II', 'genre': 'Fighting', 'console': 'Super Nintendo', 'year': 1991, 'rate': 4.3, 'status': 'Want to Play'},
-    {'id': 10, 'name': 'Minecraft', 'genre': 'Sandbox', 'console': 'Playstation 4', 'year': 2011, 'rate': 4.5, 'status': 'Playing'}
-]
+while True:
+    menu()
+    option = input('Type your choice:\n')
+    if option == '0':
+        print('Closing the program...\n')
+        break
+    elif option == '1':
+        # Show all user's Games
+        print_games(game_list)
+    elif option == '2':
+        # Prompt user to select a search criteria
+        selected_filter = (get_user_input(search_criteria_list))
+        filter_function = filter_functions[selected_filter]
 
-empty_game_list = []
+        if selected_filter == 'Name':
+         game_name = input('Please type the name of the game you would like to search:\n')
+         search_result = filter_function(game_name, game_list)
 
-search_criteria_list = ['Name', 'Status', 'Genre', 'Console', 'Year']
+        elif selected_filter == 'Console':
+         console_name = input('Please type the name of the console you would like to search:\n')
+         search_result = filter_function(console_name, game_list)
 
-def is_empty(g_list):
-   # An empty list is considered False in Python, so 'not' turns it into True.
-   return not g_list
+        elif selected_filter == 'Year':
+         selected_year = get_year_input()
+         search_result = filter_function(selected_year, game_list)
 
-def print_games(g_list):
-   # Call the check_games function
-   c_games_result = is_empty(g_list)
+        elif selected_filter == 'Genre':
+         selected_genre = get_user_input(genre_list)
+         search_result = filter_function(selected_genre, game_list)
 
-   # Check if the list of games is empty
-   if c_games_result:
+        elif selected_filter == 'Status':
+         selected_status = get_user_input(status_list)
+         search_result = filter_function(selected_status, game_list)
 
-      # If there's no games in the list
-      empty_list_message = '\nYour game list is empty. To add a game to your list click HERE!'
-      print(empty_list_message)
-      return
+        # Show all results
+        print_games(search_result)
 
-   # Get the number of games in the list
-   total_of_games = len(g_list)
-   print(f'\nList of Games - Total of games: {total_of_games}')
-   print("=" * 145)
+    else:
+        print('Invalid Option, try again...')
 
-   # Edit the width of the columns for the terminal prompt
-   col_name = "GAME".ljust(25)
-   col_genre = 'GENRE'.rjust(30)                      
-   col_console = 'CONSOLE'.rjust(30)                      
-   col_year = 'YEAR'.rjust(15)                      
-   col_status = 'STATUS'.rjust(30)                      
-   col_rate = 'RATE'.rjust(15)   
-   print(col_name + col_genre + col_console + col_year + col_status + col_rate)
-   print("-" * 145)
 
-   # Iterate through the list and print all the games      
-   for game in g_list:
-      format_game = game['name'].ljust(25)         
-      format_genre = game['genre'].rjust(30)         
-      format_console = game['console'].rjust(30)         
-      format_year = str(game['year']).rjust(15)         
-      format_status = game['status'].rjust(30)         
-      format_rate = str(game['rate']).rjust(15)
-      print(format_game + format_genre + format_console + format_year + format_status + format_rate)
-
-def get_games(g_list):
-   # Get the number of games in the list
-   total_of_games = len(g_list)
-
-   # Convert the dictionary into JSON
-   games_json = json.dumps(g_list)    
-
-   return total_of_games, games_json
-
-# print(get_games(game_list))
-# print_games(game_list)
-
-# print(get_games(empty_game_list))
-# print_games(empty_game_list)
-
-# -------------------------- SEARCH SECTION ---------------------------------- #
-
-# Prompt the customer to select one option (mirroring the frontend)
-def get_user_input(option_list):
-   valid_option = False
-  
-   # While the option are not valid send an error message and request the user to select again
-   while not valid_option:
-      print(f'You have the following otions:')
-      for index, option in enumerate(option_list, start=1):
-         print(f'{index} - {option}')
-
-      # Save the input in a variable as an interger
-      selected_option_input = int(input('To select an option, please type the number of one the options above:\n'))
-
-      # Validate user's input to check if selected option exists
-      if selected_option_input >= 1 and selected_option_input <= len(option_list):
-         # Find the selected otion in the respective list
-         selected_option = option_list[selected_option_input - 1]
-         valid_option = True
-         
-      else:
-         print('Please select a valid option.\n')
-
-   return selected_option
-
-# ----------------------------------------FILTER BY GAME ------------------------------------------------------ #
-
-# game_name = input('Please type the name of the game you would like to search:\n')
-
-# Function to normalize the data
-def normalize(field):
-   normalized_field = field.lower().strip()
-   return normalized_field
-
-# Function to search a game by name
-def filter_by_name(user_input, g_list):
-   # Normalize the user's input
-   normalized_input = normalize(user_input)
-
-   search_game_result = []
-
-   # Iterate through the List of games to search based on customers input
-   for game in g_list:
-      normalized_game_name = normalize(game['name'])
-      has_search_game = normalized_input in normalized_game_name
-
-      # Save the result in the search game list
-      if has_search_game:
-         search_game_result.append(game)
-   
-   # Return the list of games found 
-   return search_game_result
-
-# print(filter_by_name(game_name, game_list))
-
-# ----------------------------------------FILTER BY STATUS ------------------------------------------------------ #
-
-# Function to search a game by status
-def filter_by_status(status, g_list):
-   search_status_result = []
-
-   # Iterate through the List of games to search based on customers input
-   for game in g_list:
-      has_search_status = status == game['status']
-   
-      # Save the result in the search status list
-      if has_search_status:
-          search_status_result.append(game)
-      
-   # Return the list of games found 
-   return search_status_result
-
-# ----------------------------------------FILTER BY CONSOLE ------------------------------------------------------ #
-
-# console_name = input('Please type the name of the console you would like to search:\n')
-
-# Function to search a game by console name
-def filter_by_console(user_input, g_list):
-   # Normalize the user's input
-   normalized_input = normalize(user_input)
-
-   search_console_result = []
-
-   # Iterate through the List of games to search based on customers input
-   for game in g_list:
-      normalized_console_name = normalize(game['console'])
-      has_search_console = normalized_input == normalized_console_name
-
-      # Save the result in the search console list
-      if has_search_console:
-         search_console_result.append(game)
-   
-   # Return the list of games found
-   return search_console_result
-
-# ----------------------------------------FILTER BY YEAR ------------------------------------------------------ #
-
-# Prompt the customer to select a stert year
-def get_year_input():
-   valid_year = False
-  
-   # While the years are not valid send an error message and request the years again
-   while not valid_year:
-      start_year = int(input('Please type the start year:\n'))
-      end_year = int(input('Please type the end year:\n'))
-
-      # Validate user's input to check if start year is smaller then end year
-      if start_year <= end_year:
-         valid_year = True
-         
-      else:
-         print('Start year cannot be after the end year.\n')
-
-   return start_year, end_year
-
-# Function to search a game between a start year and a end year
-def filter_by_year(year_input, g_list):
-   start_year, end_year = year_input
-
-   search_year_result = []
-
-    # Iterate through the List of games to search based on customers input
-   for game in g_list:
-      # If the game year is between the start year and end year add it the search game list
-      if start_year <= game['year'] and game['year'] <= end_year:
-         search_year_result.append(game)
-
-   return search_year_result
-
-# ----------------------------------------FILTER BY GENRE ------------------------------------------------------ #
-
-# Function to search a game by genre
-def filter_by_genre(genre, g_list):
-   search_genre_result = []
-
-   # Iterate through the List of games to search based on customers input
-   for game in g_list:
-      has_search_genre = genre == game['genre']
-   
-      # Save the result in the search genre list
-      if has_search_genre:
-          search_genre_result.append(game)
-      
-   # Return the list of games found 
-   return search_genre_result
 
 # -------------------------- STATS SECTION ---------------------------------- #
-
-filter_functions = {'Name': filter_by_name, 'Status': filter_by_status, 'Genre': filter_by_genre, 'Console': filter_by_console, 'Year': filter_by_year}
-
-selected_filter = (get_user_input(search_criteria_list))
-
-filter_function = filter_functions[selected_filter]
-
-if selected_filter == 'Name':
-   game_name = input('Please type the name of the game you would like to search:\n')
-   search_result = filter_function(game_name, game_list)
-
-elif selected_filter == 'Console':
-   console_name = input('Please type the name of the console you would like to search:\n')
-   search_result = filter_function(console_name, game_list)
-
-elif selected_filter == 'Year':
-   selected_year = get_year_input()
-   search_result = filter_function(selected_year, game_list)
-
-elif selected_filter == 'Genre':
-   selected_genre = get_user_input(genre_list)
-   search_result = filter_function(selected_genre, game_list)
-
-elif selected_filter == 'Status':
-   selected_status = get_user_input(status_list)
-   search_result = filter_function(selected_status, game_list)
-
-# print(search_result)
