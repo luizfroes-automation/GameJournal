@@ -1,12 +1,13 @@
-from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions
+from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions, statistics_menu_list
 
-from functions import get_user_input, get_year_input, get_games, print_games
+from functions import get_user_input, get_year_input, get_games, print_games, get_statistics, normalize
 
 # -------------------------- MENU SECTION ---------------------------------- #
 def menu():
     print('\n- - - Welcome to your Game Journal - - - \n')
     print('Option 1: List of games')
     print('Option 2: Search a game')
+    print('Option 3: Statistics')
     print('Option 0: Exit')
 
 while True:
@@ -20,7 +21,7 @@ while True:
         print_games(game_list)
     elif option == '2':
         # Prompt user to select a search criteria
-        selected_filter = (get_user_input(search_criteria_list))
+        selected_filter = get_user_input(search_criteria_list)
         filter_function = filter_functions[selected_filter]
 
         if selected_filter == 'Name':
@@ -46,9 +47,15 @@ while True:
         # Show all results
         print_games(search_result)
 
+    elif option =='3':
+      # Prompt user to select a statistics menu option
+      # The normalized menu option must match the game dictionary key
+      # Changing the menu label without updating the dictionary key can cause an error
+      selcted_statistics_option = normalize(get_user_input(statistics_menu_list))
+
+      print(get_statistics(selcted_statistics_option, game_list))
+
     else:
-        print('Invalid Option, try again...')
-
-
+      print('Invalid Option, try again...')
 
 # -------------------------- STATS SECTION ---------------------------------- #

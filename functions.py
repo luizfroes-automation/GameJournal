@@ -196,3 +196,20 @@ def filter_by_genre(genre, g_list):
       
    # Return the list of games found 
    return search_genre_result
+
+# -------------------------- GET STATS PER OPTION ---------------------------------- #
+
+def get_statistics(statistics_option, g_list):
+    statistics_per_option = {}
+
+    for game in g_list:
+        selected_option = game[statistics_option]
+        ratings  = game['rate']
+
+        if selected_option not in statistics_per_option:
+            statistics_per_option[selected_option] = {'total': 0, 'ratings': []}
+
+        statistics_per_option[selected_option]['total'] += 1
+        statistics_per_option[selected_option]['ratings'].append(ratings)
+
+    return statistics_per_option
