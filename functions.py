@@ -202,14 +202,27 @@ def filter_by_genre(genre, g_list):
 def get_statistics(statistics_option, g_list):
     statistics_per_option = {}
 
+    # Iterate through the list of games
     for game in g_list:
         selected_option = game[statistics_option]
         ratings  = game['rate']
 
+        #  If the item does not exist in the dictionary create a new one
         if selected_option not in statistics_per_option:
             statistics_per_option[selected_option] = {'total': 0, 'ratings': []}
 
+        # For each matching item add 1 to the total and appen the rate to the rating list
         statistics_per_option[selected_option]['total'] += 1
         statistics_per_option[selected_option]['ratings'].append(ratings)
+
+    # Iterate through the statistics dictionary 
+    for key, value in statistics_per_option.items():
+
+       #Calculate the average rating with 2 decimals
+       average_ratings = round(sum(value['ratings']) / value['total'], 2)
+
+       # Append the average rating to the dictionary
+       statistics_per_option[key]['average'] = average_ratings
+    
 
     return statistics_per_option
