@@ -1,15 +1,8 @@
 from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions, statistics_menu_list
 
-from functions import get_user_input, get_year_input, get_games, print_games, get_statistics, normalize
+from functions import menu, get_user_input, get_year_input, get_games, print_games, get_statistics, normalize, get_total_statistics
 
 # -------------------------- MENU SECTION ---------------------------------- #
-def menu():
-    print('\n- - - Welcome to your Game Journal - - - \n')
-    print('Option 1: List of games')
-    print('Option 2: Search a game')
-    print('Option 3: Statistics')
-    print('Option 0: Exit')
-
 while True:
     menu()
     option = input('Type your choice:\n')
@@ -48,12 +41,25 @@ while True:
         print_games(search_result)
 
     elif option =='3':
-      # Prompt user to select a statistics menu option
-      # The normalized menu option must match the game dictionary key
-      # Changing the menu label without updating the dictionary key can cause an error
-      selcted_statistics_option = normalize(get_user_input(statistics_menu_list))
+      total_statistics = get_total_statistics(game_list)
 
-      print(get_statistics(selcted_statistics_option, game_list))
+      if total_statistics is None:
+         print('No games are currently saved in your game list.\nIf you would like to add a game, please return to the main menu and select the option to add a new game.')
+
+      else:
+        print(total_statistics)
+
+        while True:
+            # Prompt user to select a statistics menu option
+            # The normalized menu option must match the game dictionary key
+            # Changing the menu label without updating the dictionary key can cause an error
+            selcted_statistics_option = normalize(get_user_input(statistics_menu_list))
+
+            if selcted_statistics_option == 'return to the menu':
+                break
+
+            else:
+                print(get_statistics(selcted_statistics_option, game_list))
 
     else:
       print('Invalid Option, try again...')

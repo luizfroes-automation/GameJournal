@@ -1,10 +1,21 @@
 import json
 
+# ---------------------------------------- PRINT MENU ------------------------------------------------------ #
+
+def menu():
+    print('\n- - - Welcome to your Game Journal - - - \n')
+    print('Option 1: List of games')
+    print('Option 2: Search a game')
+    print('Option 3: Statistics')
+    print('Option 0: Exit')
+
+# ---------------------------------------- CHECK IF A LIST IS EMPTY ------------------------------------------------------ #
+
 def is_empty(g_list):
    # An empty list is considered False in Python, so 'not' turns it into True.
    return not g_list
 
-# ----------------------------------------PRINT GAMES ------------------------------------------------------ #
+# ---------------------------------------- PRINT GAMES ------------------------------------------------------ #
 
 def print_games(g_list):
    # Call the check_games function
@@ -197,6 +208,45 @@ def filter_by_genre(genre, g_list):
    # Return the list of games found 
    return search_genre_result
 
+# -------------------------- SHOW ALL STATS ---------------------------------- #
+
+def get_total_statistics(g_list):
+   # Check if the game list is empty
+   is_game_list_empty = is_empty(g_list)
+
+   # If is empty return None 
+   if is_game_list_empty:
+      return None
+
+   total_statistics = {}
+   avg_ratings_sum = 0
+   max_rated_game = g_list[0]
+   min_rated_game = g_list[0]
+
+   # Get the number of total games on the game list
+   total_games = len(g_list)
+
+   # Iterate through the statistics dictionary to get the sum of the ratings and calculate the average rating, get the higher and lower rated game
+   for game in g_list:
+      # Get the sum of all the ratings
+      avg_ratings_sum += game['rate']
+
+      # Get the higher rated game and add to the variable
+      if game['rate'] > max_rated_game['rate']:
+         max_rated_game = game
+
+      # Get the lower rated game and add to the variable
+      if game['rate'] < min_rated_game['rate']:
+         min_rated_game = game
+
+   # Calculate the average rating with 2 decimals
+   total_average_ratings = round((avg_ratings_sum / total_games), 2)
+
+   # Add the stats to the dictionary
+   total_statistics = {'total': total_games, 'average_rating': total_average_ratings, 'lowest_rated_game': min_rated_game, 'highest_rated_game': max_rated_game} 
+
+   return total_statistics
+
 # -------------------------- GET STATS PER OPTION ---------------------------------- #
 
 def get_statistics(statistics_option, g_list):
@@ -218,11 +268,10 @@ def get_statistics(statistics_option, g_list):
     # Iterate through the statistics dictionary 
     for key, value in statistics_per_option.items():
 
-       #Calculate the average rating with 2 decimals
+       # Calculate the average rating with 2 decimals
        average_ratings = round(sum(value['ratings']) / value['total'], 2)
 
        # Append the average rating to the dictionary
        statistics_per_option[key]['average'] = average_ratings
     
-
     return statistics_per_option
