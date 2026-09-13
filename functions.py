@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 # ---------------------------------------- PRINT MENU ------------------------------------------------------ #
 
@@ -6,7 +7,10 @@ def menu():
     print('\n- - - Welcome to your Game Journal - - - \n')
     print('Option 1: List of games')
     print('Option 2: Search a game')
-    print('Option 3: Statistics')
+    print('Option 3: Add a game')
+    print('Option 4: Edit a game')
+    print('Option 5: Remove a game')
+    print('Option 6: Statistics')
     print('Option 0: Exit')
 
 # ---------------------------------------- CHECK IF A LIST IS EMPTY ------------------------------------------------------ #
@@ -92,6 +96,173 @@ def get_user_input(option_list):
          print('Please select a valid option.\n')
 
    return selected_option
+
+# ---------------------------------------- VALIDATE NEW GAME INPUTS ------------------------------------------------------ #
+
+def is_input_valid(add_input, error_message):
+     while True:
+      user_input, input_type = add_input()
+      error_message_final = error_message[input_type]
+
+      if user_input is None:
+         print(error_message_final)
+
+      else:
+         return user_input
+
+# ----------------------------------------CREATE GAME RATE ------------------------------------------------------ # 
+
+def new_game_id(g_list):
+   is_list_empty = is_empty(g_list)
+
+   if is_list_empty:
+      new_id = 1
+      return new_id
+
+   highest_id = max(g_list, key=lambda game: game['id'])
+
+   new_id = highest_id['id'] + 1
+
+   return new_id
+
+# ----------------------------------------ADD GAME NAME ------------------------------------------------------ # 
+
+def add_game_name_input(g_list):
+   new_name = input('Please type the name of the new game:\n')
+   normalized_new_name = normalize(new_name)
+   input_type = 'name'
+   has_new_game_result = []
+
+   if not normalized_new_name:
+      return None, input_type
+
+   for game in g_list:
+      normalized_game_name = normalize(game['name'])
+      has_new_game = normalized_new_name == normalized_game_name
+
+      if has_new_game:
+         has_new_game_result.append(game)
+
+   if has_new_game_result:
+      input_type = 'duplicated name'
+      return None, input_type
+
+   return new_name, input_type
+
+# ----------------------------------------ADD GAME CONSOLE ------------------------------------------------------ # 
+
+def add_game_console_input():
+   new_console = input('Please type the name of the console of the new game:\n')
+   normalized_new_console = normalize(new_console)
+   input_type = 'console'
+
+   if not normalized_new_console:
+      return None, input_type
+
+   else:
+      return new_console, input_type
+
+# ----------------------------------------ADD GAME YEAR ------------------------------------------------------ # 
+
+def add_game_year_input():
+   new_year = input('Please type the year of the game:\n')
+   current_year = datetime.now().year
+   input_type = 'year'
+
+   try:
+      new_year = int(new_year)
+
+      if new_year < 1900 or current_year < new_year:
+         return None, input_type
+
+      else:
+         return new_year, input_type
+
+   except ValueError:
+      return None, input_type
+
+# ----------------------------------------ADD GAME RATE ------------------------------------------------------ # 
+
+def add_game_rate_input():
+   new_rate = input('Please type the rate of the game:\n')
+   input_type = 'rate'
+
+   try:
+      new_rate = round(float(new_rate), 1)
+
+      if new_rate < 0 or 5 < new_rate:
+         return None, input_type
+
+      else:
+         return new_rate, input_type
+
+   except ValueError:
+      return None, input_type
+
+# ----------------------------------------CREATE NEW GAME ------------------------------------------------------ #   
+
+def create_new_game(game_list, error_message_dictionary, status_list, genre_list):
+   functionality = 'add'
+
+   new_name = is_input_valid(lambda: add_game_name_input(game_list), error_message_dictionary)
+      
+   new_status = get_user_input(status_list)
+     
+   new_genre = get_user_input(genre_list)
+     
+   new_console = is_input_valid(add_game_console_input, error_message_dictionary)
+      
+   new_year = is_input_valid(add_game_year_input, error_message_dictionary)
+      
+   new_rate = is_input_valid(add_game_rate_input, error_message_dictionary)
+
+   new_id = new_game_id(game_list)
+
+   new_game = {'id': new_id, 'name': new_name, 'genre': new_genre, 'console': new_console, 'year': new_year, 'rate': new_rate, 'status': new_status}
+
+   return new_game, functionality
+
+# ----------------------------------------CONFIRM ADD NEW GAME ------------------------------------------------------ # 
+
+def confirm_new_game(modify_game, game_list, error_message_dictionary, status_list, genre_list):
+   game, functionality = modify_game
+
+   print(f"\nYour new game {game['name']} will be added")
+   print('=' * 145)
+
+   # Edit the width of the columns for the terminal prompt
+   col_name = 'GAME'.ljust(25)
+   col_genre = 'GENRE'.rjust(30)                      
+   col_console = 'CONSOLE'.rjust(30)                      
+   col_year = 'YEAR'.rjust(15)                      
+   col_status = 'STATUS'.rjust(30)                      
+   col_rate = 'RATE'.rjust(15)   
+   print(col_name + col_genre + col_console + col_year + col_status + col_rate)
+   print('-' * 145)
+
+   # Print the game
+   format_game = game['name'].ljust(25)         
+   format_genre = game['genre'].rjust(30)         
+   format_console = game['console'].rjust(30)         
+   format_year = str(game['year']).rjust(15)         
+   format_status = game['status'].rjust(30)         
+   format_rate = str(game['rate']).rjust(15)
+   print(format_game + format_genre + format_console + format_year + format_status + format_rate)
+
+   while True:
+      user_confirmation = input(f'\nAre you sure you want to {functionality} this game?\n')
+      
+      normalized_user_confirmation = normalize(user_confirmation)
+
+      if normalized_user_confirmation == 'yes':
+         game_list.append(game)
+         return True
+
+      elif normalized_user_confirmation == 'no':
+         return False
+
+      else:
+         print('\nInvalid response! Please answer YES or NO:\n')
 
 # ----------------------------------------FILTER BY GAME ------------------------------------------------------ #
 
