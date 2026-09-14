@@ -13,6 +13,13 @@ def menu():
     print('Option 6: Statistics')
     print('Option 0: Exit')
 
+# ---------------------------------------- NORMALIZE INPUT ------------------------------------------------------ #
+
+# Function to normalize the data
+def normalize(field):
+   normalized_field = field.lower().strip()
+   return normalized_field
+
 # ---------------------------------------- CHECK IF A LIST IS EMPTY ------------------------------------------------------ #
 
 def is_empty(g_list):
@@ -265,11 +272,19 @@ def create_new_game(game_list, error_message_dictionary, status_list, genre_list
 
 # ----------------------------------------CONFIRM ADD NEW GAME ------------------------------------------------------ # 
 
-def confirm_new_game(modify_game, game_list, error_message_dictionary, status_list, genre_list):
+def confirm_new_game(game_list, modify_game, *args):
    # Get the game and functionality from the returned values
-   game, functionality = modify_game
+   game, functionality = modify_game(*args)
 
-   print(f"\nYour new game {game['name']} will be added")
+   if functionality == 'add':
+      print(f"\nYour new game {game['name']} will be added")
+
+   elif functionality == 'edit':
+      print(f"\nYour game {game['name']} will be edited")
+
+   elif functionality == 'delete':
+      print(f"\nYour game {game['name']} will be deleted")
+
    print('=' * 145)
 
    # Edit the width of the columns for the terminal prompt
@@ -311,12 +326,7 @@ def confirm_new_game(modify_game, game_list, error_message_dictionary, status_li
       else:
          print('\nInvalid response! Please answer YES or NO:\n')
 
-# ----------------------------------------FILTER BY GAME ------------------------------------------------------ #
-
-# Function to normalize the data
-def normalize(field):
-   normalized_field = field.lower().strip()
-   return normalized_field
+# ----------------------------------------FILTER BY GAME TO SHOW ------------------------------------------------------ #
 
 # Function to search a game by name
 def filter_by_name(user_input, g_list):
@@ -425,6 +435,96 @@ def filter_by_genre(genre, g_list):
       
    # Return the list of games found 
    return search_genre_result
+
+# -------------------------- RETURN GAME NAMES ---------------------------------- #
+
+def return_game_names(g_list):
+   game_name_list = []
+   for game in g_list:
+      game_name_list.append(game['name'])
+
+   return game_name_list
+
+# ---------------------------------------- FILTER GAME TO EDIT ------------------------------------------------------ #
+
+# Function to search a game by name
+def filter_game_to_be_edited(user_input, g_list):
+   # Normalize the user's input
+   normalized_input = normalize(user_input)
+
+   # Iterate through the List of games to search based on customers input
+   for game in g_list:
+      normalized_game_name = normalize(game['name'])
+      has_search_game = normalized_input == normalized_game_name
+      
+      if has_search_game:
+         # Return the list of games found 
+         return game
+
+# ---------------------------------------- EDIT GAME ------------------------------------------------------ #   
+
+def edit_game(game_list, error_message_dictionary, status_list, genre_list, search_criteria_list, filter_by_name):
+   # Define the functionality to be performed
+   functionality = 'edit'
+
+   while True:
+      game_to_be_edited_input = input('Please, type the name of the game you would like to edit:\n')
+
+      edit_game_results = filter_by_name(game_to_be_edited_input, game_list)
+   
+      is_edit_game_results_empty = is_empty(edit_game_results)
+
+      if not game_to_be_edited_input.strip():
+         print("\nName cannot be empty. Please enter a value.\n")
+         continue
+   
+      if is_edit_game_results_empty:
+         print(f'\nYou do not have any games that match {game_to_be_edited}\n') 
+         continue
+
+      game_name_list = return_game_names(edit_game_results)
+   
+      game_to_be_edited = filter_game_to_be_edited(get_user_input(game_name_list), game_list)
+   
+      user_selected_option = normalize(get_user_input(search_criteria_list))
+
+      if user_selected_option == 'name':
+         # Get and validate the new game name
+         print(f'The name of this game is: {game_to_be_edited["name"]}\n')
+         new_name = is_input_valid(lambda: add_game_name_input(game_list), error_message_dictionary)
+         game_to_be_edited['name'] = new_name
+
+      elif user_selected_option == 'status':
+         # Get the new game status
+         print(f'The status of this game is: {game_to_be_edited["status"]}\n')   
+         new_status = get_user_input(status_list)
+         game_to_be_edited['status'] = new_status
+
+      elif user_selected_option == 'genre':
+         # Get the new game genre
+         print(f'The genre of this game is: {game_to_be_edited["genre"]}\n')  
+         new_genre = get_user_input(genre_list)
+         game_to_be_edited['genre'] = new_genre
+
+      elif user_selected_option == 'console':
+         # Get and validate the new game console 
+         print(f'The console of this game is: {game_to_be_edited["console"]}\n') 
+         new_console = is_input_valid(add_game_console_input, error_message_dictionary)
+         game_to_be_edited['console'] = new_console
+
+      elif user_selected_option == 'year':
+         # Get and validate the new game year
+         print(f'The year of this game is: {game_to_be_edited["year"]}\n')   
+         new_year = is_input_valid(add_game_year_input, error_message_dictionary)
+         game_to_be_edited['year'] = new_year
+
+      elif user_selected_option == 'rate':
+         # Get and validate the new game rate
+         print(f'The rate of this game is: {game_to_be_edited["rate"]}\n')    
+         new_rate = is_input_valid(add_game_rate_input, error_message_dictionary)
+         game_to_be_edited['rate'] = new_rate
+
+      return game_to_be_edited, functionality
 
 # -------------------------- SHOW ALL STATS ---------------------------------- #
 

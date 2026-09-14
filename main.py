@@ -1,6 +1,6 @@
 from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions, statistics_menu_list, error_message_dictionary
 
-from functions import menu, get_user_input, get_year_input, get_games, print_games, get_statistics, normalize, get_total_statistics, is_input_valid, add_game_name_input, add_game_year_input, add_game_rate_input, add_game_console_input, new_game_id, filter_by_genre, create_new_game, confirm_new_game
+from functions import menu, get_user_input, get_year_input, print_games, get_statistics, normalize, get_total_statistics, filter_by_name, create_new_game, confirm_new_game, edit_game
 
 # -------------------------- MENU SECTION ---------------------------------- #
 while True:
@@ -9,9 +9,11 @@ while True:
     if option == '0':
         print('Closing the program...\n')
         break
+
     elif option == '1':
         # Show all user's Games
         print_games(game_list)
+
     elif option == '2':
         # Prompt user to select a search criteria
         selected_filter = get_user_input(search_criteria_list)
@@ -41,7 +43,10 @@ while True:
         print_games(search_result)
 
     elif option == '3':
-       confirm_new_game(create_new_game(game_list, error_message_dictionary, status_list, genre_list), game_list, error_message_dictionary, status_list, genre_list)
+       confirm_new_game(game_list, create_new_game, game_list, error_message_dictionary, status_list, genre_list)
+
+    elif option == '4':
+        confirm_new_game(game_list, edit_game, game_list, error_message_dictionary, status_list, genre_list, search_criteria_list, filter_by_name)           
 
     elif option =='6':
       total_statistics = get_total_statistics(game_list)
