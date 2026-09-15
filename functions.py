@@ -90,17 +90,21 @@ def get_user_input(option_list):
       for index, option in enumerate(option_list, start=1):
          print(f'{index} - {option}')
 
-      # Save the input in a variable as an interger
-      selected_option_input = int(input('To select an option, please type the number of one the options above:\n'))
+      try:
+         # Save the input in a variable as an interger
+         selected_option_input = int(input('To select an option, please type the number of one the options above:\n'))
 
-      # Validate user's input to check if selected option exists
-      if selected_option_input >= 1 and selected_option_input <= len(option_list):
-         # Find the selected otion in the respective list
-         selected_option = option_list[selected_option_input - 1]
-         valid_option = True
+         # Validate user's input to check if selected option exists
+         if selected_option_input >= 1 and selected_option_input <= len(option_list):
+            # Find the selected otion in the respective list
+            selected_option = option_list[selected_option_input - 1]
+            valid_option = True
          
-      else:
-         print('Please select a valid option.\n')
+         else:
+            print('\nPlease select a valid option.\n')
+
+      except ValueError:
+         print('\nPlease select a valid option.\n')
 
    return selected_option
 
@@ -315,8 +319,18 @@ def confirm_new_game(game_list, modify_game, *args):
 
        # Add the game to the list if the user confirms
       if normalized_user_confirmation == 'yes':
-         game_list.append(game)
-         return True
+         if functionality == 'delete':
+            game_list.remove(game)
+            return True
+
+         elif functionality == 'add':
+            game_list.append(game)
+            return True
+
+         elif functionality == 'edit':
+            game_to_update = get_game_by_id(game, game_list)
+            game_to_update.update(game)
+            return True
 
       # Cancel the action if the user does not confirm
       elif normalized_user_confirmation == 'no':
@@ -445,10 +459,10 @@ def return_game_names(g_list):
 
    return game_name_list
 
-# ---------------------------------------- FILTER GAME TO EDIT ------------------------------------------------------ #
+# ---------------------------------------- FILTER GAME TO EDITED OR DELETED BY NAME ------------------------------------------------------ #
 
 # Function to search a game by name
-def filter_game_to_be_edited(user_input, g_list):
+def filter_game_to_be_edited_or_deleted(user_input, g_list):
    # Normalize the user's input
    normalized_input = normalize(user_input)
 
@@ -461,9 +475,25 @@ def filter_game_to_be_edited(user_input, g_list):
          # Return the list of games found 
          return game
 
+
+# ---------------------------------------- GET GAME BY ID ------------------------------------------------------ #
+
+# Function to search a game by ID
+def get_game_by_id(dictionary, game_list):
+   edit_game_id = dictionary['id']
+
+   # Iterate through the List of games to search based on customers input
+   for game in game_list:
+      game_id = game['id']
+      has_search_game = edit_game_id == game_id
+      
+      if has_search_game:
+         # Return the list of games found 
+         return game
+
 # ---------------------------------------- EDIT GAME ------------------------------------------------------ #   
 
-def edit_game(game_list, error_message_dictionary, status_list, genre_list, search_criteria_list, filter_by_name):
+def edit_game(game_list, error_message_dictionary, status_list, genre_list, edit_criteria_list, filter_by_name):
    # Define the functionality to be performed
    functionality = 'edit'
 
@@ -479,14 +509,16 @@ def edit_game(game_list, error_message_dictionary, status_list, genre_list, sear
          continue
    
       if is_edit_game_results_empty:
-         print(f'\nYou do not have any games that match {game_to_be_edited}\n') 
+         print(f'\nYou do not have any games that match {game_to_be_edited_input}\n') 
          continue
 
       game_name_list = return_game_names(edit_game_results)
    
-      game_to_be_edited = filter_game_to_be_edited(get_user_input(game_name_list), game_list)
+      selected_game = filter_game_to_be_edited_or_deleted(get_user_input(game_name_list), game_list)
+
+      game_to_be_edited = selected_game.copy()
    
-      user_selected_option = normalize(get_user_input(search_criteria_list))
+      user_selected_option = normalize(get_user_input(edit_criteria_list))
 
       if user_selected_option == 'name':
          # Get and validate the new game name
@@ -525,6 +557,34 @@ def edit_game(game_list, error_message_dictionary, status_list, genre_list, sear
          game_to_be_edited['rate'] = new_rate
 
       return game_to_be_edited, functionality
+
+
+   # ---------------------------------------- DELETE GAME ------------------------------------------------------ #   
+
+def delete_game(game_list, error_message_dictionary, filter_by_name):
+   # Define the functionality to be performed
+   functionality = 'delete'
+
+   while True:
+      game_to_be_deleted_input = input('Please, type the name of the game you would like to edit:\n')
+
+      delete_game_results = filter_by_name(game_to_be_deleted_input, game_list)
+   
+      is_delete_game_results_empty = is_empty(delete_game_results)
+
+      if not game_to_be_deleted_input.strip():
+         print("\nName cannot be empty. Please enter a value.\n")
+         continue
+   
+      if is_delete_game_results_empty:
+         print(f'\nYou do not have any games that match {game_to_be_deleted_input}\n') 
+         continue
+
+      game_name_list = return_game_names(delete_game_results)
+   
+      game_to_be_deleted = filter_game_to_be_edited_or_deleted(get_user_input(game_name_list), game_list)
+   
+      return game_to_be_deleted, functionality
 
 # -------------------------- SHOW ALL STATS ---------------------------------- #
 

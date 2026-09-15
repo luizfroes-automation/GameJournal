@@ -23,6 +23,8 @@ empty_game_list = []
 
 search_criteria_list = ['Name', 'Status', 'Genre', 'Console', 'Year']
 
+edit_criteria_list = ['Name', 'Status', 'Genre', 'Console', 'Year', 'Rate']
+
 statistics_menu_list = ['Status', 'Genre', 'Console', 'Return to the Menu']
 
 filter_functions = {

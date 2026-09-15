@@ -1,6 +1,6 @@
-from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions, statistics_menu_list, error_message_dictionary
+from data import game_list, genre_list, status_list, empty_game_list, search_criteria_list, filter_functions, statistics_menu_list, error_message_dictionary, edit_criteria_list
 
-from functions import menu, get_user_input, get_year_input, print_games, get_statistics, normalize, get_total_statistics, filter_by_name, create_new_game, confirm_new_game, edit_game
+from functions import menu, get_user_input, get_year_input, print_games, get_statistics, normalize, get_total_statistics, filter_by_name, create_new_game, confirm_new_game, edit_game, delete_game
 
 # -------------------------- MENU SECTION ---------------------------------- #
 while True:
@@ -46,7 +46,10 @@ while True:
        confirm_new_game(game_list, create_new_game, game_list, error_message_dictionary, status_list, genre_list)
 
     elif option == '4':
-        confirm_new_game(game_list, edit_game, game_list, error_message_dictionary, status_list, genre_list, search_criteria_list, filter_by_name)           
+        confirm_new_game(game_list, edit_game, game_list, error_message_dictionary, status_list, genre_list, edit_criteria_list, filter_by_name) 
+
+    elif option == '5':
+       confirm_new_game(game_list, delete_game, game_list, error_message_dictionary, filter_by_name)         
 
     elif option =='6':
       total_statistics = get_total_statistics(game_list)
