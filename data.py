@@ -1,25 +1,9 @@
 from functions import filter_by_name, filter_by_status, filter_by_genre, filter_by_console, filter_by_year
-import json
 from datetime import datetime
 
 genre_list = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Sports', 'Racing', 'Puzzle', 'Platformer', 'Horror', 'Fighting', 'Shooter', 'Party', 'Sandbox']
 
 status_list = ['Playing', 'Completed', 'Want to Play', 'Abandoned']
-
-game_list = [
-    {'id': 1, 'name': 'Final Fantasy', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2010, 'rate': 4.2, 'status': 'Playing'},
-    {'id': 2, 'name': 'Final Fantasy VII Remake', 'genre': 'RPG', 'console': 'Playstation 4', 'year': 2020, 'rate': 4.9, 'status': 'Completed'},
-    {'id': 3, 'name': 'GTA 4', 'genre': 'Action', 'console': 'Playstation 4', 'year': 2016, 'rate': 4.8, 'status': 'Completed'},
-    {'id': 4, 'name': 'GTA San Andreas', 'genre': 'Action', 'console': 'Playstation 2', 'year': 2004, 'rate': 4.7, 'status': 'Abandoned'},
-    {'id': 5, 'name': 'Halo 5', 'genre': 'Shooter', 'console': 'Playstation 5', 'year': 2020, 'rate': 3.8, 'status': 'Want to Play'},
-    {'id': 6, 'name': 'Super Mario Kart', 'genre': 'Racing', 'console': 'Super Nintendo', 'year': 1996, 'rate': 4.1, 'status': 'Abandoned'},
-    {'id': 7, 'name': 'The Legend of Zelda', 'genre': 'Adventure', 'console': 'Super Nintendo', 'year': 1998, 'rate': 5.0, 'status': 'Completed'},
-    {'id': 8, 'name': 'Dark Souls', 'genre': 'RPG', 'console': 'Playstation 3', 'year': 2011, 'rate': 4.6, 'status': 'Playing'},
-    {'id': 9, 'name': 'Street Fighter II', 'genre': 'Fighting', 'console': 'Super Nintendo', 'year': 1991, 'rate': 4.3, 'status': 'Want to Play'},
-    {'id': 10, 'name': 'Minecraft', 'genre': 'Sandbox', 'console': 'Playstation 4', 'year': 2011, 'rate': 4.5, 'status': 'Playing'}
-]
-
-empty_game_list = []
 
 search_criteria_list = ['Name', 'Status', 'Genre', 'Console', 'Year']
 
@@ -40,5 +24,5 @@ error_message_dictionary = {
     'duplicated name': 'This game already exist in your Game List! Please type a valid name for your game:\n',
     'console': 'Your console name cannot be empty! Please type a valid name for your game:\n',
     'year': f'Invalid year! Please type a year between 1900 and {datetime.now().year}:\n',
-    'rate': 'Inavlid rate! Please type a rate between 0 and 5:\n'
+    'rate': 'Invalid rate! Please type a rate between 0 and 5:\n'
 }
