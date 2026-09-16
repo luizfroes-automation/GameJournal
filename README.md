@@ -15,6 +15,26 @@ This project was built as a Computer Science course challenge, with a deliberate
 - **Persistence** — the full journal is saved to `game_list.json` after every change, and reloaded automatically the next time the program starts.
 - **Robust input handling** — invalid input (empty fields, non-numeric input, out-of-range values) never crashes the program; the user is prompted to try again.
 
+## Demo
+
+**Listing all games**
+![Listing all games](assets/list-games.gif)
+
+**Adding a game**
+![Adding a game](assets/add-game.gif)
+
+**Searching**
+![Searching for a game](assets/search-game.gif)
+
+**Editing a game**
+![Editing a game](assets/edit-game.gif)
+
+**Removing a game**
+![Removing a game](assets/delete-game.gif)
+
+**Statistics**
+![Statistics](assets/statistics.gif)
+
 ## Requirements
 
 - Python 3 (no version-specific syntax is used)
